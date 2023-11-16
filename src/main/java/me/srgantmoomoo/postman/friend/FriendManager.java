@@ -13,17 +13,14 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public final class FriendManager {
-    public record Friend(String name, UUID uuid) { }
+    public record Friend(String name, UUID uuid) {}
 
     public static final FriendManager INSTANCE = new FriendManager();
 
-    private final List<Friend> friends = new ArrayList<>();
+    private final Set<Friend> friends = new HashSet<>();
 
     private final Path friendFile = Path.of(new File(MinecraftClient.getInstance().runDirectory, "postman") + "\\friends.json");
 
@@ -34,15 +31,20 @@ public final class FriendManager {
     public void load() {
         if (!Files.exists(this.friendFile)) {
             try {
-                Files.createDirectories(this.friendFile);
                 Files.createFile(this.friendFile);
-
-                for (final var friend : this.gson.fromJson(Files.readString(this.friendFile), JsonObject.class).keySet()) {
-                    this.friends.add(new Friend(friend, MinecraftClient.getInstance().getSocialInteractionsManager().getUuid(friend)));
-                }
+                this.save();
             } catch (final IOException e) {
                 Main.logger.error("Couldn't load friend file\n" + e.getLocalizedMessage());
             }
+            return;
+        }
+
+        try {
+            for (final var friend : this.gson.fromJson(Files.readString(this.friendFile), JsonObject.class).keySet()) {
+                this.friends.add(new Friend(friend, MinecraftClient.getInstance().getSocialInteractionsManager().getUuid(friend)));
+            }
+        } catch (final IOException e) {
+            Main.logger.error("Couldn't read friend file\n" + e.getLocalizedMessage());
         }
     }
 
@@ -61,7 +63,9 @@ public final class FriendManager {
     }
 
     public void add(final String name) {
-        this.friends.add(new Friend(name, MinecraftClient.getInstance().getSocialInteractionsManager().getUuid(name)));
+        if (this.friends.stream().noneMatch(friend -> friend.name.equalsIgnoreCase(name))) {
+            this.friends.add(new Friend(name, MinecraftClient.getInstance().getSocialInteractionsManager().getUuid(name)));
+        }
     }
 
     public void remove(final String name) {
@@ -70,5 +74,9 @@ public final class FriendManager {
 
     public boolean isFriend(final ClientPlayerEntity player) {
         return this.friends.stream().anyMatch(friend -> friend.uuid == player.getUuid());
+    }
+
+    public Set<Friend> getFriends() {
+        return this.friends;
     }
 }

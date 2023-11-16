@@ -1,21 +1,19 @@
 package me.srgantmoomoo.postman.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class Command {
-    private String name;
-    private String description;
-    private String syntax;
+    private final String name;
+    private final String description;
+    private final String syntax;
 
-    private List<String> aliases = new ArrayList<String>();
+    private final List<String> aliases;
 
     public Command(String name, String description, String syntax, String... aliases) {
         this.name = name;
         this.description = description;
         this.syntax = syntax;
-        this.aliases = Arrays.asList(aliases);
+        this.aliases = List.of(aliases);
     }
 
     public abstract void onCommand(String[] args, String command);

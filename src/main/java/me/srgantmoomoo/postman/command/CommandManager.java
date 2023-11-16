@@ -10,20 +10,20 @@ import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandManager {
-    public ArrayList<Command> commands = new ArrayList<Command>();
+    private final List<Command> commands = List.of(
+            new Bind(),
+            new Clear(),
+            Friend.INSTANCE,
+            new ListModules(),
+            new ListSettings(),
+            new Prefix(),
+            new Setting(),
+            new Toggle()
+    );
     private String prefix = ",";
-
-    public CommandManager() {
-        commands.add(new Bind());
-        commands.add(new Clear());
-        commands.add(new ListModules());
-        commands.add(new ListSettings());
-        commands.add(new Prefix());
-        commands.add(new Setting());
-        commands.add(new Toggle());
-    }
 
     // called in MixinClientConnection.
     public void onClientChat(String input) {
@@ -35,14 +35,14 @@ public class CommandManager {
             //TODO fix this fucking shit.
             boolean commandFound = false;
             String commandName = input.split(" ")[0];
-            if(commandName.equals("") || commandName.equals("help")) {
+            if(commandName.isEmpty() || commandName.equals("help")) {
                 sendClientChatMessage("\n" + Formatting.GRAY + Formatting.BOLD + "i love postman <3" + "\n" + Formatting.RESET, false);
                 for(Command c : commands) {
                     String dividers = c.getSyntax().replace("|", Formatting.GRAY + "" + Formatting. ITALIC + "|" + Formatting.AQUA + "" + Formatting.ITALIC); // turns dividers grey for better look :)
                     sendClientChatMessage(c.getName() + Formatting.WHITE + " - " + c.getDescription() + Formatting.AQUA + Formatting.ITALIC + " [" + dividers + "]" + Formatting.RESET + Formatting.GRAY + ".", false);
                 }
                 sendClientChatMessage("\n" + Formatting.RESET + Formatting.GRAY + Formatting.BOLD + "i hate postman." + "\n", false);
-            }else {
+            } else {
                 for(Command c : commands) {
                     if(c.getAliases().contains(commandName) || c.getName().equalsIgnoreCase(commandName)) {
                         c.onCommand(Arrays.copyOfRange(input.split(" "), 1, input.split(" ").length), input);

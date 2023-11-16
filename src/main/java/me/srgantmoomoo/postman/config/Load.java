@@ -1,6 +1,7 @@
 package me.srgantmoomoo.postman.config;
 
 import me.srgantmoomoo.postman.Main;
+import me.srgantmoomoo.postman.friend.FriendManager;
 import me.srgantmoomoo.postman.module.Module;
 import me.srgantmoomoo.postman.module.setting.Setting;
 import me.srgantmoomoo.postman.module.setting.settings.*;
@@ -24,6 +25,8 @@ public class Load {
         loadModules();
         loadSettings();
         loadPrefix();
+
+        FriendManager.INSTANCE.load();
     }
 
     public void loadModules() {

@@ -43,7 +43,5 @@ public class Main implements ModInitializer {
 
         save = new Save();
         load = new Load();
-
-        FriendManager.INSTANCE.load();
     }
 }
