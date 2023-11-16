@@ -4,8 +4,8 @@ import me.srgantmoomoo.postman.event.Event;
 
 // posted in MixinKeyboard
 public class EventKeyPress extends Event<EventKeyPress> {
-    private int key;
-    private int scanCode;
+    private final int key;
+    private final int scanCode;
 
     public EventKeyPress(int key, int scanCode) {
         this.key = key;

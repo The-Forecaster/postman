@@ -43,5 +43,9 @@ public class Main implements ModInitializer {
 
         save = new Save();
         load = new Load();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            save.save();
+        }));
     }
 }

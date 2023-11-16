@@ -4,20 +4,20 @@ import me.srgantmoomoo.postman.event.Event;
 import me.srgantmoomoo.postman.event.events.EventKeyPress;
 import me.srgantmoomoo.postman.module.modules.ClickGuiModule;
 import me.srgantmoomoo.postman.module.modules.Example;
+import me.srgantmoomoo.postman.module.modules.player.MiddleClick;
 import me.srgantmoomoo.postman.module.modules.render.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleManager {
-    private final ArrayList<Module> modules = new ArrayList<>();
-
-    public ModuleManager() {
-        modules.add(new ClickGuiModule());
-        modules.add(new Example());
-        modules.add(new FullBright());
-        modules.add(new VibrantShader());
-    }
+public final class ModuleManager {
+    private final List<Module> modules = List.of(
+            MiddleClick.INSTANCE,
+            new FullBright(),
+            new VibrantShader(),
+            new ClickGuiModule(),
+            new Example()
+    );
 
     public void onEvent(Event e) {
         for(Module module : getModules()) {
@@ -34,8 +34,8 @@ public class ModuleManager {
         }
     }
 
-    public ArrayList<Module> getModules() {
-        return modules;
+    public List<Module> getModules() {
+        return this.modules;
     }
 
     public Module getModule(String name) {
@@ -46,11 +46,11 @@ public class ModuleManager {
         return null;
     }
 
-    public List<Module> getModulesInCategory(Category category) {
-        List<Module> result = new ArrayList<>();
+    public List<Module> getModulesInCategory(final Category category) {
+        final List<Module> result = new ArrayList<>();
 
-        for(Module module : modules) {
-            if(module.getCategory().getName().equalsIgnoreCase(category.getName())) {
+        for (final Module module : this.modules) {
+            if (module.getCategory().getName().equalsIgnoreCase(category.getName())) {
                 result.add(module);
             }
         }

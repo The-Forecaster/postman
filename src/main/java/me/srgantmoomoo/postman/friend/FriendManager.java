@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import me.srgantmoomoo.postman.Main;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -72,7 +73,7 @@ public final class FriendManager {
         this.friends.removeIf(friend -> Objects.equals(friend.name, name));
     }
 
-    public boolean isFriend(final ClientPlayerEntity player) {
+    public boolean isFriend(final PlayerEntity player) {
         return this.friends.stream().anyMatch(friend -> friend.uuid == player.getUuid());
     }
 
