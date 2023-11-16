@@ -3,18 +3,19 @@ package me.srgantmoomoo.postman;
 import me.srgantmoomoo.postman.command.CommandManager;
 import me.srgantmoomoo.postman.config.Load;
 import me.srgantmoomoo.postman.config.Save;
+import me.srgantmoomoo.postman.friend.FriendManager;
 import me.srgantmoomoo.postman.module.ModuleManager;
 import me.srgantmoomoo.postman.module.setting.SettingManager;
 import net.fabricmc.api.ModInitializer;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //soir
 public class Main implements ModInitializer {
     int strong;
     int postman = strong;
 
-    private static Logger logger;
+    public static final Logger logger = LoggerFactory.getLogger("postman");
 
     public final String MODID = "postman";
     public final String NAME = "postman";
@@ -42,5 +43,7 @@ public class Main implements ModInitializer {
 
         save = new Save();
         load = new Load();
+
+        FriendManager.INSTANCE.load();
     }
 }
