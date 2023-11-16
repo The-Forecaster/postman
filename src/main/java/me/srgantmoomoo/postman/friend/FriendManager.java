@@ -73,8 +73,16 @@ public final class FriendManager {
         this.friends.removeIf(friend -> Objects.equals(friend.name, name));
     }
 
+    public void clearFriends() {
+        this.friends.clear();
+    }
+
     public boolean isFriend(final PlayerEntity player) {
         return this.friends.stream().anyMatch(friend -> friend.uuid == player.getUuid());
+    }
+
+    public boolean isFriend(final String name) {
+        return this.friends.stream().anyMatch(friend -> friend.name.equalsIgnoreCase(name));
     }
 
     public Set<Friend> getFriends() {

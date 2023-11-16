@@ -1,7 +1,6 @@
 package me.srgantmoomoo.postman.module.modules.player;
 
 import me.srgantmoomoo.postman.Main;
-import me.srgantmoomoo.postman.command.CommandManager;
 import me.srgantmoomoo.postman.event.Event;
 import me.srgantmoomoo.postman.event.events.EventMouse;
 import me.srgantmoomoo.postman.friend.FriendManager;
@@ -28,16 +27,14 @@ public class MiddleClick extends Module {
                     return;
                 }
 
-                if (!(minecraft.targetedEntity instanceof PlayerEntity player)) {
-                    return;
-                }
-
-                if (FriendManager.INSTANCE.isFriend(player)) {
-                    FriendManager.INSTANCE.add(player.getEntityName());
-                    Main.INSTANCE.commandManager.sendClientChatMessage("Added " + player.getEntityName() + " to friends list", true);
-                } else {
-                    FriendManager.INSTANCE.remove(player.getEntityName());
-                    Main.INSTANCE.commandManager.sendClientChatMessage("Removed " + player.getEntityName() + " from friends list", true);
+                if (minecraft.targetedEntity instanceof PlayerEntity player) {
+                    if (FriendManager.INSTANCE.isFriend(player)) {
+                        FriendManager.INSTANCE.remove(player.getEntityName());
+                        Main.INSTANCE.commandManager.sendClientChatMessage("Removed " + player.getEntityName() + " from friends list", true);
+                    } else {
+                        FriendManager.INSTANCE.add(player.getEntityName());
+                        Main.INSTANCE.commandManager.sendClientChatMessage("Added " + player.getEntityName() + " to friends list", true);
+                    }
                 }
             }
         }
